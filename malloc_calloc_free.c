@@ -12,7 +12,15 @@ void* malloc1(size_t size) {
     __aloc__ += size;
     return ptr;
 }
+void* calloc1(size_t n , size_t size){
+    if(__aloc__+n*size > HEAP_SIZE ) return NULL;
+    void* ptr = malloc(n * size);
+    if(ptr != NULL){
+        memset(ptr,0,size*n);
 
+    }
+    return ptr;
+}
 #define free1(z) (__aloc__ -= (z))  // Works like stack only
 
 int main() {
