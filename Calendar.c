@@ -1,92 +1,94 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define constants for true/false logic
 #define TRUE 1
 #define FALSE 0
 
-// Days in each month for a non-leap year
-#define DAYS {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+// Days in each month (non-leap year)
+const int DAYS_IN_MONTH[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-// Names of the months
-#define MONTHS {"January", "February", "March", "April", "May", \
-                "June", "July", "August", "September", "October", "November", "December"}
+// Month names
+const char *MONTH_NAMES[] = {
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+};
 
-// Struct to represent a date
+// Date structure
 typedef struct {
     int day;
-    int mounth; // Note: Typo in 'mounth' — it should be 'month'
+    int month;
     int year;
-} n;
+} Date;
 
-// Function to print a date in the format: "day Month year"
-void print_date(n date) {
-    char *mon[] = MONTHS;
-    printf("%d %s %d\n", date.day, mon[date.mounth - 1], date.year);
+// Print a date in "day Month year" format
+void print_date(Date date) {
+    printf("%d %s %d\n", date.day, MONTH_NAMES[date.month - 1], date.year);
 }
 
 // Check if a year is a leap year
 int is_leap_year(int year) {
-    if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
-        return TRUE;
-    }
-    return FALSE;
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
 
-// Get the number of days in a given month of a specific year
+// Get number of days in a given month for a specific year
 int get_days_in_month(int month, int year) {
-    int days[] = DAYS;
     if (month < 1 || month > 12) return -1;
-    if (month == 2 && is_leap_year(year)) return 29; // Adjust for leap year February
-    return days[month - 1];
+    if (month == 2 && is_leap_year(year)) return 29;
+    return DAYS_IN_MONTH[month - 1];
 }
 
-// Print a simple list of months with their number of days
+// Print number of days in each month
 void print_calendar(int year) {
-    char *months[] = MONTHS;
-    int days[] = DAYS;
-
     printf("Calendar for the year %d:\n\n", year);
-
     for (int i = 0; i < 12; i++) {
-        int days_in_month = (i == 1 && is_leap_year(year)) ? 29 : days[i];
-        printf("%s: %d days\n", months[i], days_in_month);
+        int days = (i == 1 && is_leap_year(year)) ? 29 : DAYS_IN_MONTH[i];
+        printf("%s: %d days\n", MONTH_NAMES[i], days);
     }
 }
 
-// Print a full calendar layout for the entire year
+// Print the full calendar layout for the year
 void print_full_calendar(int year) {
-    char *months[] = MONTHS;
-    int days[] = DAYS;
+    printf("Full Calendar for the year %d:\n", year);
 
-    printf("Full Calendar for the year %d:\n\n", year);
-
-    int day_of_week = 0; // Assume January 1st starts on Sunday (0 = Sunday)
+    int day_of_week = 0;  // Assume Jan 1 starts on Sunday
 
     for (int i = 0; i < 12; i++) {
-        int days_in_month = (i == 1 && is_leap_year(year)) ? 29 : days[i];
+        int days = (i == 1 && is_leap_year(year)) ? 29 : DAYS_IN_MONTH[i];
 
-        // Print month header
-        printf("\n%s:\n", months[i]);
+        printf("\n%s:\n", MONTH_NAMES[i]);
         printf("Sun Mon Tue Wed Thu Fri Sat\n");
 
-        // Print leading spaces for the first row
-        for (int s = 0; s < day_of_week; s++) {
+        // Initial spacing for the first day
+        for (int space = 0; space < day_of_week; space++) {
             printf("    ");
         }
 
-        // Print days of the month
-        for (int day = 1; day <= days_in_month; day++) {
+        // Print all days of the month
+        for (int day = 1; day <= days; day++) {
             printf("%3d ", day);
-            day_of_week = (day_of_week + 1) % 7; // Move to the next day of the week
+            day_of_week = (day_of_week + 1) % 7;
+
             if (day_of_week == 0) {
-                printf("\n"); // New line after Saturday
+                printf("\n");  // New line after Saturday
             }
         }
 
-        // Add spacing after the month if the last week isn't complete
+        // Ensure spacing between months
         if (day_of_week != 0) {
             printf("\n");
         }
     }
+}
+
+// Example usage
+int main() {
+    int year = 2024;
+
+    print_calendar(year);           // Simple days per month
+    print_full_calendar(year);      // Full visual calendar
+
+    Date date = {15, 2, 2024};
+    print_date(date);               // Example date output
+
+    return 0;
 }
