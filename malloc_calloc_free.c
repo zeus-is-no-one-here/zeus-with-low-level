@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stddef.h>
-#include <string.h>
+#include <string.h>  
 #define HEAP_SIZE 1024
 static char heap[HEAP_SIZE];
 static size_t __aloc__ = 0;
