@@ -9,6 +9,7 @@ void trash_heap(int *p){
      free(p);
     // Note: Accessing p[1000000000000000] is undefined behavior and may crash the program.
     // Always ensure array bounds are respected when accessing memory.
+     //....
 }
 int main(){
     int *p = NULL;
